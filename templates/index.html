@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <title>Health Camp SPA</title>
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <script src="static/common.js"></script>
+        <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+        <script>
+            
+        </script>
+    </head>
+    <body onload="load();createDB();">
+        <div>
+            <div class="header">
+                Health Camp SPA
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="tab" onclick="getForm(event,'Demographics')">Demographics</button>
+                <button class="tab" onclick="getForm(event,'HealthVitals')">Health Vitals</button>
+                <button class="tab" onclick="getForm(event,'Reports');read();">Reports</button>
+            </div>
+        </div>
+        <div id="Demographics" class="container">
+            <table cellspacing="25" style="float:left;">
+                <tr>
+                    <td>
+                        First Name: <input type="text" id="f_name" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last Name: <input type="text" id="l_name">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Gender: <select id="gender">
+                            <option>select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Age: <input type="number" id="age"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Notes or Other Details: <input type="text" id="other"><br>
+                    </td>
+                </tr>
+                <tr>
+
+                </tr>
+                <tr>
+                    <td>
+                        <button onclick="getForm(event,'HealthVitals');" class="saveButton">Next</button>
+                    </td>
+                </tr>
+                
+        </table>
+        <table style="float:right;">
+            <br>
+            <tr>
+                <td>
+                    Photo:
+                </td>
+            </tr>
+            <tr>
+                <td class="imageBox">
+                    <img id="img" style="display:none;" src="#"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type='file' id= "myFile" onchange="showImage(this);"/>
+                </td>
+            </tr>
+        </table>
+        </div>
+        <div id="HealthVitals" class="container">
+            <table cellspacing="25" style="float:left;">
+                <tr>
+                    <td>
+                        Height: <input type="text">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Weight: <input type="text">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Body Temperature: <input type="text">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Pulse Rate: <input type="text">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Blood Pressure: <input type="text">
+                    </td>
+                </tr>
+                <tr>
+
+                </tr>
+                <tr>
+                    <td>
+                        <button onclick="insert();" class="saveButton">Save</button>
+                    </td>
+                </tr>
+                
+        </table>
+        <table style="float:right;">
+            <br>
+            <tr>
+                <td>
+                    Medications:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea name="medications" id="medications" cols="30" rows="10"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Notes:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea name="notes" id="notes" cols="30" rows="10"></textarea>
+                </td>
+            </tr>
+        </table>
+        </div>
+        <div id="Reports" class="container">
+            <table border="1" id="Patient_Details" class="reports">
+                <th colspan="6" style="background-color: dimgrey">Patients Details</th>
+                <tr style="background-color: darkgray;">
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Photo</th>
+                    <th>Medications</th>
+                    <th>Notes</th>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
