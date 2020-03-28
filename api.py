@@ -1,50 +1,48 @@
-import flask
-from flask_restful import Api, Resource, reqparse
+from flask import Flask, render_template, request
+import sqlite3
 
-app = flask.Flask(__name__)
-api = Api(app)
+app = Flask(__name__)
+
+@app.route('/',methods=['GET','POST'])
+def patients():
+    conn = sqlite3.connect('patients.db',check_same_thread=False)
+    print('Connection Established')
+    c = conn.cursor()
+    if request.method == 'GET':
+        conn.row_factory = sqlite3.Row
+        c.execute("select * from patients")
+        columns = [column[0]for column in c.description]
+        result = []
+        for row in c.fetchall():
+            result.append(dict(zip(columns,row)))
+        return render_template('index.html',result=result)
+
+    elif request.method == 'POST':
+        try:
+            f_name = request.form['f_name']
+            l_name = request.form['l_name']
+            gender = request.form['gender']
+            age = request.form['age']
+            med = request.form['med']
+            notes = request.form['notes']
+            c.execute("INSERT INTO patients (f_name,l_name,gender,age,med,notes) VALUES (?,?,?,?,?,?)",
+            (f_name,l_name,gender,age,med,notes))
+            conn.commit()
+            msg = "Record inserted successfully"
+            print(msg)
+        except:
+            conn.rollback()
+            msg = "Error in inserting the record"
+            print(msg)
+        finally:
+            conn.row_factory = sqlite3.Row
+            c.execute("select * from patients")
+            columns = [column[0]for column in c.description]
+            result = []
+            for row in c.fetchall():
+                result.append(dict(zip(columns,row)))  
+            return render_template('index.html',msg=msg,result=result)
 
 
-patientDB = [{
-                'name':"Rushikesh",
-                'age' :24,
-                'note':"Fit"
-            },
-            {
-                'name':"Kunal",
-                'age' :25,
-                'note':"Obese"
-            }
-        ]
-
-class Patients(Resource):
-    def get(self):
-        #return flask.jsonify(patientDB),200
-        resp = ""
-        for patient in patientDB:
-                resp += "<body><b>Name:</b> " + patient['name'] + "<b> Age: </b>" + str(patient['age'])
-                resp += " <b>Notes:</b> " + patient['note'] +"</body> <br>"
-
-        return flask.make_response(resp)
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument("name")
-        parser.add_argument("age")
-        parser.add_argument("note")
-        args = parser.parse_args()
-
-        patient = { 'name': args["name"],
-                    'age' : args["age"],
-                    'note': args["note"]
-                    }
-        patientDB.append(patient)
-        resp = ""
-        for patient in patientDB:
-                resp += "<body><b>Name:</b> " + patient['name'] + "<b> Age: </b>" + str(patient['age'])
-                resp += " <b>Notes:</b> " + patient['note'] +"</body> <br>"
-
-
-        return flask.make_response(resp)
-
-api.add_resource(Patients,"/patient")
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run()
